@@ -1,6 +1,6 @@
 import React, { useState } from "react"; // Import React and useState hook
 import { Link } from "react-router-dom"; // Import Link from react-router-dom
-import { FaBars, FaSearch, FaFilter, FaList, FaRss, FaShieldAlt, FaBell, FaFileExport, FaHome, FaCrosshairs } from "react-icons/fa"; // Import icons from react-icons
+import { FaBars, FaSearch, FaFilter, FaList, FaRss, FaShieldAlt, FaBell, FaFileExport, FaHome, FaCrosshairs, FaRegUser, FaUserPlus } from "react-icons/fa"; // Import icons from react-icons
 import "./Navbar.css"; // Import styles
 
 function Navbar() {
@@ -21,6 +21,7 @@ function Navbar() {
       {dropdownOpen && ( // Conditional rendering of dropdown menu
         <ul className="dropdown-menu"> {/* Dropdown menu */}
           <li><Link to="/"><FaHome /> Home</Link></li> {/* Home link */}
+          <li><Link to="/addusers"><FaUserPlus /> Add User</Link></li> {/* Home link */}
           <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search by Date link */}
           <li><Link to="/searchcompanies"><FaSearch /> TBD </Link></li> {/* Search by Vendor link */}
           <li><Link to="/"><FaFilter /> TBD</Link></li> {/* Filter by CVSS link */}
