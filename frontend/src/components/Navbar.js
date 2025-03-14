@@ -21,14 +21,10 @@ function Navbar() {
       {dropdownOpen && ( // Conditional rendering of dropdown menu
         <ul className="dropdown-menu"> {/* Dropdown menu */}
           <li><Link to="/"><FaHome /> Home</Link></li> {/* Home link */}
-          <li><Link to="/search-by-date"><FaSearch /> Search by Date</Link></li> {/* Search by Date link */}
-          <li><Link to="/search-by-vendor"><FaSearch /> Search by Vendor</Link></li> {/* Search by Vendor link */}
-          <li><Link to="/filter-by-cvss"><FaFilter /> Filter by CVSS</Link></li> {/* Filter by CVSS link */}
-          <li><Link to="/search-by-category"><FaList /> Search by Category</Link></li> {/* Search by Category link */}
-          <li><Link to="/real-time-feed"><FaRss /> Real-Time Feed</Link></li> {/* Real-Time Feed link */}
-          <li><Link to="/domain-reputation"><FaSearch /> Domain Reputation</Link></li> {/* Domain Reputation link */}
-          <li><Link to="/key-word-search"><FaCrosshairs/> Keyword Search</Link></li> {/* key word search link */}
-          <li><Link to="/export-reports"><FaFileExport /> Export Reports</Link></li> {/* Export Reports link */}
+          <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search by Date link */}
+          <li><Link to="/searchcompanies"><FaSearch /> TBD </Link></li> {/* Search by Vendor link */}
+          <li><Link to="/"><FaFilter /> TBD</Link></li> {/* Filter by CVSS link */}
+          <li><Link to="/"><FaList /> TBD</Link></li> {/* Search by Category link */}
         </ul>
       )}
     </nav>

@@ -16,7 +16,7 @@ function App() {
         <main className="content"> {/* Main Content */}
           <Routes> {/* Define routes */}
             <Route path="/" element={<Home />} /> {/* Home Page */}
-            <Route path="/search-jobs" element={<SearchJobs />} /> {/* Home Page */}
+            <Route path="/searchjobs" element={<SearchJobs />} /> {/* Home Page */}
           </Routes>
         </main>
 
