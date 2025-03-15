@@ -5,6 +5,7 @@ import Navbar from "./components/Navbar"; // Import the Navbar
 import Home from "./pages/Home"; // Home Page
 import AddUser from "./pages/addusers";
 import SearchJobs from "./pages/searchjobs";
+import ReviewCompany from "./pages/reviews";
 
 import "./App.css"; // Importing styles
 
@@ -19,6 +20,7 @@ function App() {
             <Route path="/" element={<Home />} /> {/* Home Page */}
             <Route path="/addusers" element={<AddUser />} /> {/* Add User Page */}
             <Route path="/searchjobs" element={<SearchJobs />} /> {/* Search Jobs Page */}
+            <Route path="/reviews" element={<ReviewCompany />} /> {/* Check Company Reviews */}
           </Routes>
         </main>
 

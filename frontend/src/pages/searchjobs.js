@@ -10,6 +10,7 @@ function SearchJobs() {
   });
 
   const [jobs, setJobs] = useState([]);
+  const [showFilters, setShowFilters] = useState(false);
 
   const fetchJobs = async () => {
     if (!filters.title.trim()) {
@@ -48,50 +49,62 @@ function SearchJobs() {
   }
 
   return (
-    <div className="container">
+    <div className='container'>
       <h1>Jobs</h1>
-      <div className="input-group mb-3">
+      <div className='input-group mb-3'>
         <input
-          type="text"
-          className="form-control"
+          type='text'
+          className='form-control'
           name='title'
-          placeholder="Enter job title"
+          placeholder='Enter job title'
           value={filters.title}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           required
         />
-        <input
-          type="text"
-          className="form-control"
-          name='companyName'
-          placeholder="Enter the company name"
-          value={filters.companyName}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
-        />
-        <input
-          type="text"
-          className="form-control"
-          name='location'
-          placeholder="Enter the location"
-          value={filters.location}
-          onChange={handleInputChange}
-          onKeyPress={handleKeyPress}
-        />
-        <div className="input-group-append">
-          <button className="btn btn-primary" type="button" onClick={handleSearchClick}>
-            Search
-          </button>
-        </div>
+        <button
+          className='btn btn-secondary'
+          type='button'
+          onClick={() => setShowFilters(!showFilters)}
+        >
+          Filter
+        </button>
+        <button className='btn btn-primary' type='button' onClick={handleSearchClick}>
+          Search
+        </button>
       </div>
-      <table className="table">
+
+      {showFilters && (
+        <div className='filter-box p-3 border rounded'>
+          <h5>Advanced Filters</h5>
+          <input
+            type='text'
+            className='form-control mb-2'
+            name='companyName'
+            placeholder='Enter the company name'
+            value={filters.companyName}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+          />
+          <input
+            type='text'
+            className='form-control mb-2'
+            name='location'
+            placeholder='Enter the location'
+            value={filters.location}
+            onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
+          />
+        </div>
+      )}
+
+      <table className='table mt-3'>
         <thead>
           <tr>
             <th>Title</th>
             <th>Company Name</th>
             <th>Industry</th>
-            <th>Job Type</th>
+            <th>Job type</th>
             <th>Location</th>
             <th>Job URL</th>
           </tr>
@@ -104,11 +117,12 @@ function SearchJobs() {
               <td>{job.industry}</td>
               <td>{job.jobType}</td>
               <td>{job.companyLocation}</td>
-              <td><a href={job.jobUrl} target="_blank" rel="noopener noreferrer">{job.jobUrl}</a></td>
+              <td><a href={job.jobUrl} target="_blank" rel='noopener noreferrer'>{job.jobUrl}</a></td>
             </tr>
           ))}
         </tbody>
       </table>
+
     </div>
   );
 }
