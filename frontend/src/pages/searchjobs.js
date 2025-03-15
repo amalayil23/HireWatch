@@ -3,14 +3,24 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 function SearchJobs() {
-  const [title, setTitle] = useState('');  // State for job title input
+  const [filters, setFilters] = useState({
+    title: '',
+    companyName: '',
+    location: ''
+  });
+
   const [jobs, setJobs] = useState([]);
 
   const fetchJobs = async () => {
+    if (!filters.title.trim()) {
+      alert("Please enter title of a job.");
+      return;
+    }
+
     try {
-      console.log("Fetching jobs...");
+      console.log("Fetching jobs with filters...", filters);
       const response = await axios.get('https://hirewatch.pythonanywhere.com/searchjobs', {
-        params: { title }
+        params: filters
       });
       console.log("Response data:", response.data);
       setJobs(response.data);
@@ -20,12 +30,22 @@ function SearchJobs() {
   };
 
   const handleInputChange = (event) => {
-    setTitle(event.target.value);
+    const { name, value } = event.target;
+    setFilters(prevFilters => ({
+      ...prevFilters,
+      [name]: value
+    }));
   };
 
   const handleSearchClick = () => {
     fetchJobs();
   };
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      fetchJobs();
+    }
+  }
 
   return (
     <div className="container">
@@ -34,9 +54,30 @@ function SearchJobs() {
         <input
           type="text"
           className="form-control"
+          name='title'
           placeholder="Enter job title"
-          value={title}
+          value={filters.title}
           onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+          required
+        />
+        <input
+          type="text"
+          className="form-control"
+          name='companyName'
+          placeholder="Enter the company name"
+          value={filters.companyName}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
+        />
+        <input
+          type="text"
+          className="form-control"
+          name='location'
+          placeholder="Enter the location"
+          value={filters.location}
+          onChange={handleInputChange}
+          onKeyPress={handleKeyPress}
         />
         <div className="input-group-append">
           <button className="btn btn-primary" type="button" onClick={handleSearchClick}>
