@@ -6,6 +6,7 @@ import Home from "./pages/Home"; // Home Page
 import AddUser from "./pages/addusers";
 import SearchJobs from "./pages/searchjobs";
 import ReviewCompany from "./pages/reviews";
+import ScheduleInterview from "./pages/scheduleinterview";
 
 import "./App.css"; // Importing styles
 
@@ -21,6 +22,7 @@ function App() {
             <Route path="/addusers" element={<AddUser />} /> {/* Add User Page */}
             <Route path="/searchjobs" element={<SearchJobs />} /> {/* Search Jobs Page */}
             <Route path="/reviews" element={<ReviewCompany />} /> {/* Check Company Reviews */}
+            <Route path="/scheduleinterview" element={<ScheduleInterview />} /> {/* Check Interview Booking */}
           </Routes>
         </main>
 

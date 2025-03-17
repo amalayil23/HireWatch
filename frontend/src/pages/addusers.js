@@ -48,7 +48,13 @@ function AddUser() {
             setMessage('Error adding user.');
             console.error('Error:', error)
         }
+
     };
+
+    const handleClear = () => {
+        setUser({ firstName: '', lastName: '', email: '', major: '', year: ''});
+        setMessage('');
+    }
 
     return (
         <div className="container">
@@ -75,6 +81,7 @@ function AddUser() {
                     <input type="text" className="form-control" name="year" value={user.year} onChange={handleChange} required></input>
                 </div>
                 <button type="submit" className="btn btn-success">Add User</button>
+                <button type="button" className="btn btn-secondary ms-2" onClick={handleClear}>Clear</button>
             </form>
             {message && <p className="mt-3">{message}</p>}
         </div>
