@@ -7,6 +7,8 @@ import AddUser from "./pages/addusers";
 import SearchJobs from "./pages/searchjobs";
 import ReviewCompany from "./pages/reviews";
 import ScheduleInterview from "./pages/scheduleinterview";
+import Login from "./pages/login"
+import Savedjobs from "./pages/savedjobs";
 
 import "./App.css"; // Importing styles
 
@@ -23,6 +25,8 @@ function App() {
             <Route path="/searchjobs" element={<SearchJobs />} /> {/* Search Jobs Page */}
             <Route path="/reviews" element={<ReviewCompany />} /> {/* Check Company Reviews */}
             <Route path="/scheduleinterview" element={<ScheduleInterview />} /> {/* Check Interview Booking */}
+            <Route path="/login" element={<Login/>} />
+            <Route path="/savedjobs" element={<Savedjobs/>} />
           </Routes>
         </main>
 

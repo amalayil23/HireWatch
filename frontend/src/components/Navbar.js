@@ -22,7 +22,9 @@ function Navbar() {
       {dropdownOpen && ( // Conditional rendering of dropdown menu
         <ul className="dropdown-menu"> {/* Dropdown menu */}
           <li><Link to="/"><FaHome /> Home</Link></li> {/* Home link */}
-          <li><Link to="/addusers"><FaUserPlus /> Add User</Link></li> {/* Home link */}
+          <li><Link to="/login"><FaUserPlus /> Sign In</Link></li>
+          <li><Link to="/savedjobs"><FaUserPlus /> Saved JObs</Link></li>
+          <li><Link to="/addusers"><FaUserPlus /> Sign Up</Link></li> {/* Home link */}
           <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search by Date link */}
           <li><Link to="/reviews"><MdOutlineReviews /> Reviews </Link></li> {/* Search by Vendor link */}
           <li><Link to="/scheduleinterview"><FaHandshake /> Book Interview</Link></li> {/* Filter by CVSS link */}
