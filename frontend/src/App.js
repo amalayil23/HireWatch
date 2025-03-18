@@ -3,7 +3,10 @@ import axios from "axios"; // Import Axios
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Import Router
 import Navbar from "./components/Navbar"; // Import the Navbar
 import Home from "./pages/Home"; // Home Page
+import AddUser from "./pages/addusers";
 import SearchJobs from "./pages/searchjobs";
+import ReviewCompany from "./pages/reviews";
+import ScheduleInterview from "./pages/scheduleinterview";
 
 import "./App.css"; // Importing styles
 
@@ -16,7 +19,10 @@ function App() {
         <main className="content"> {/* Main Content */}
           <Routes> {/* Define routes */}
             <Route path="/" element={<Home />} /> {/* Home Page */}
-            <Route path="/searchjobs" element={<SearchJobs />} /> {/* Home Page */}
+            <Route path="/addusers" element={<AddUser />} /> {/* Add User Page */}
+            <Route path="/searchjobs" element={<SearchJobs />} /> {/* Search Jobs Page */}
+            <Route path="/reviews" element={<ReviewCompany />} /> {/* Check Company Reviews */}
+            <Route path="/scheduleinterview" element={<ScheduleInterview />} /> {/* Check Interview Booking */}
           </Routes>
         </main>
 
