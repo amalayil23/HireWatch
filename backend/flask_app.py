@@ -1,5 +1,5 @@
 
-# A very simple Flask Hello World app for you to get started with...
+#HIREWATCH BACKEND APP########################################
 
 from flask import Flask, request, jsonify
 import pymysql
