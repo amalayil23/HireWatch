@@ -8,7 +8,7 @@ import SearchJobs from "./pages/searchjobs";
 import ReviewCompany from "./pages/reviews";
 import ScheduleInterview from "./pages/scheduleinterview";
 import Login from "./pages/login"
-import Savedjobs from "./pages/savedjobs";
+import Savedjobs from "./pages/saved_jobs";
 
 import "./App.css"; // Importing styles
 

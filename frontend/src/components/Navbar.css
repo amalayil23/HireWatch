@@ -67,3 +67,44 @@
 .dropdown-menu a:hover {
   color: #FFD700; /* Gold color on hover */
 }
+
+/************************************************************/
+
+.dropdown-menu li {
+  padding: 10px;
+  cursor: pointer;
+  color: white;
+}
+
+.dropdown-menu li:hover {
+  background-color: #444;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: #ccc;
+  margin: 5px 0;
+}
+
+.dropdown-user-info {
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+.dropdown-signout-button {
+  width: 100%;
+  background-color: #0d0d0d;
+  color: white;
+  border: none;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.dropdown-signout-button:hover {
+  background-color: #f1b0b0;
+}

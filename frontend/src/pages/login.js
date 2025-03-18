@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  // Get the original page's path from the state
+  const from = location.state?.from || "/";
 
   const handleLogin = async (e) => {
     e.preventDefault(); // Prevent the form from refreshing the page
@@ -26,7 +33,7 @@ const Login = () => {
         localStorage.setItem("name", name);
 
         // Update the message with a success message
-        setMessage(`Welcome, ${name}!`);
+        navigate(from);
       }
     } catch (error) {
       console.error("Error details:", error); // Log the error object for debugging
