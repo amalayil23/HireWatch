@@ -219,7 +219,6 @@ def addUser():
 
 #Search Jobs
 #/searchjobs##############################################################################################################################
-
 @app.route('/searchjobs', methods=['GET'])
 def viewJobs():
     title = request.args.get('title', '').strip()
@@ -278,6 +277,7 @@ def scheduleInterview():
     return jsonify(result), 201
 
 #/login#############################################################################################################################
+##JWT used
 @app.route('/login', methods=['POST'])
 def login():
     username = request.json.get("username", None)
