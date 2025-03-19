@@ -289,17 +289,19 @@ def login():
     else:
         h_password = h.md5(password.encode()).hexdigest()
         db = Database()
-        try:
-            result = db.login(username, h_password)
-            access_token = create_access_token(identity=result[0]['userid'])
-        except Exception as e:
-            result = {"Error calling class object":str(e)}
+        result = db.login(username, h_password)
         if result == [] or result==():
-            result = {"Login Failed!":403}
+            return jsonify({"Login Failed! Wrong Username or Password.":"403"})
         elif result == "500 Server Error":
-            result = {"Server Error":500}
+            return jsonify({"Server Error":500})
+        else:
+            try:
+                access_token = create_access_token(identity=result[0]['userid'])
+                return jsonify(access_token=access_token, name = result[0]['name'])
+            except Exception as e:
+                return jsonify({"Error calling class object":str(e)})
 
-    return jsonify(access_token=access_token, name = result[0]['name'])
+    return jsonify(result)
 
 #/savedjobs#############################################################################################################################
 
