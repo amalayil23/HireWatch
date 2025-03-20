@@ -46,13 +46,21 @@ class Database:
         return result
 
 #ADD-USER#######################################################ADD USER############################################################
-    def addUser(self, name, email, major, year):
+    def addUser(self, name, email, major, year, password):
         try:
+            self.con.begin()
             sqlQuery = "INSERT INTO Users (name, email, major, year) VALUES (%s, %s, %s, %s)"
             self.cur.execute(sqlQuery, (name, email, major, year))
+            userid = self.cur.lastrowid
+
+            hashed_password = h.md5(password.encode()).hexdigest()
+            sqlQueryPassword = "INSERT INTO Passwords (userid, pass) VALUES (%s, %s)"
+            self.cur.execute(sqlQueryPassword, (userid, hashed_password))
+
             self.con.commit()
             return {"message": "User has been successfully added!"}
-        except pymysql.MYSQLError as err:
+        except pymysql.IntegrityError as err:
+            self.com.rollback()
             print(f"Database error: {err}")
             return {"error": f'Database error {err}'}
         finally:
@@ -64,7 +72,7 @@ class Database:
     def searchJob(self, title, companyName, location):
         try:
             sqlQuery = """
-            SELECT j.title, c.companyName, j.jobType, c.industry, c.companyLocation, j.jobUrl
+            SELECT j.jobid, j.title, c.companyName, j.jobType, c.industry, c.companyLocation, j.jobUrl
             FROM Jobs j
             JOIN Companies c ON j.companyid = c.companyid
             WHERE j.title LIKE %s
@@ -87,6 +95,26 @@ class Database:
         finally:
             self.con.close()
         return result
+
+#SAVE-JOBS#########################################################################################################################
+    def saveJob(self, userid, jobid):
+        try:
+            sqlQueryCheck = "SELECT * FROM Saved_Jobs WHERE userid = %s AND jobid = %s"
+            self.cur.execute(sqlQueryCheck, (userid, jobid))
+            existing_entry = self.cur.fetchone()
+
+            if existing_entry:
+                return {"message": "Job already saved"}
+
+            sqlQuerySave = "INSERT INTO Saved_Jobs (userid, jobid, dateSaved) VALUES (%s, %s, CURDATE())"
+            self.cur.execute(sqlQuerySave, (userid, jobid))
+            self.con.commit()
+            return {"message": "Job saved successfully"}
+        except pymysql.MYSQLError as err:
+            self.con.rollback()
+            return {"error": f"Database error {err}"}
+        finally:
+            self.con.close()
 
 #GET-REVIEWS#########################################################################################################################
     def getReviews(self, companyName=None):
@@ -196,9 +224,10 @@ def addUser():
     email = data.get('email')
     major = data.get('major')
     year = data.get('year')
+    password = data.get('password')
 
-    if not name or not email or not major or not year:
-        return jsonify({'message': 'First name, last name, email, major and year are required'}), 400
+    if not all([name, email, major, year, password]):
+        return jsonify({'message': 'All fields are required'}), 400
 
     try:
         year = int(year)
@@ -208,7 +237,7 @@ def addUser():
         return jsonify({'message': 'Valid year must be entered.'}), 400
 
     db = Database()
-    result = db.addUser(name, email, major, year)
+    result = db.addUser(name, email, major, year, password)
 
     if "error" in result:
         print("Database Error:", result["error"])
@@ -302,6 +331,32 @@ def login():
                 return jsonify({"Error calling class object":str(e)})
 
     return jsonify(result)
+
+#/savejos#############################################################################################################################
+@app.route("/savejob", methods=["GET", "POST"])
+@jwt_required()
+def save_job():
+    current_user = get_jwt_identity()
+    data = request.json
+    jobid = data.get("jobid")
+
+    if not jobid:
+        return jsonify({"error": "Job ID is required"}), 400
+    elif not current_user:
+        return jsonify({"error": "Invalid or missing login"}), 403
+    elif jobid and current_user:
+        try:
+            db = Database()
+            result = db.saveJob(current_user, jobid)
+        except Exception as e:
+            return jsonify({"Error":str(e)})
+
+    if "error" in result:
+        return jsonify(result), 500
+
+    else:
+        return jsonify(result), 200
+
 
 #/savedjobs#############################################################################################################################
 
