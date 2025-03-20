@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react"; // Import React and hooks
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import { FaBars, FaSearch, FaHome, FaUserPlus, FaHandshake } from "react-icons/fa"; // Import icons
-import { MdOutlineReviews } from "react-icons/md";
+import { MdOutlineReviews, MdOutlineSavedSearch } from "react-icons/md";
 
 import "./Navbar.css"; // Import styles
 
@@ -77,7 +77,7 @@ function Navbar() {
             </>
           )}
           <li><Link to="/"><FaHome /> Home</Link></li> {/* Home link */}
-          <li><Link to="/savedjobs"><FaUserPlus /> Saved Jobs</Link></li> {/* Saved Jobs link */}
+          <li><Link to="/savedjobs"><MdOutlineSavedSearch /> Saved Jobs</Link></li> {/* Saved Jobs link */}
           <li><Link to="/addusers"><FaUserPlus /> Sign Up</Link></li> {/* Sign Up link */}
           <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search Jobs link */}
           <li><Link to="/reviews"><MdOutlineReviews /> Reviews</Link></li> {/* Reviews link */}

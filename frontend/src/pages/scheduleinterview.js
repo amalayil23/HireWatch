@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate  } from "react-router-dom";
 import axios from "axios";
 
 function ScheduleInterview() {
@@ -12,6 +13,16 @@ function ScheduleInterview() {
     });
 
     const [message, setMessage] = useState("")
+    const navigate = useNavigate();
+    const uname = localStorage.getItem("name");
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            navigate("/login", { state: { from: "/scheduleinterview" } });
+        }
+    }, [navigate]);
 
     const handleChange = (event) => {
         setInterview({

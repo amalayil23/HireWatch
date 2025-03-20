@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
 
@@ -11,6 +11,16 @@ function SearchJobs() {
 
   const [jobs, setJobs] = useState([]);
   const [showFilters, setShowFilters] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+      setIsLoggedIn(true);
+    } 
+  }, []);
 
   const fetchJobs = async () => {
     if (!filters.title.trim()) {
@@ -29,6 +39,30 @@ function SearchJobs() {
       console.error("Error fetching jobs:", error);
     }
   };
+
+  const saveJob = async (jobid) => {
+    console.log(jobid)
+    console.log(token)
+    if (!isLoggedIn) {
+      alert('You must be logged in to save jobs');
+      return
+    }
+
+    try {
+      const response = await axios.post(
+        'https://hirewatch.pythonanywhere.com/savejob',
+        { jobid:jobid },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      alert(response.data.message || 'Job saved successfully!');
+    } catch (error) {
+      console.error('Error saving job:', error)
+      alert('Failed to save job. Please try again.')
+    }
+  }
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -118,6 +152,13 @@ function SearchJobs() {
               <td>{job.jobType}</td>
               <td>{job.companyLocation}</td>
               <td><a href={job.jobUrl} target="_blank" rel='noopener noreferrer'>{job.jobUrl}</a></td>
+              <td>
+                <button
+                  className='btn btn-success btn-sm'
+                  onClick={() => saveJob(job.jobid)}
+                >
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>

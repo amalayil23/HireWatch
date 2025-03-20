@@ -7,7 +7,9 @@ function AddUser() {
         lastName: '',
         email: '',
         major: '',
-        year: ''
+        year: '',
+        password: '',
+        confirmPassword: ''
     });
 
     const [message, setMessage] = useState('');
@@ -28,11 +30,17 @@ function AddUser() {
             setMessage("Invalid year! Must be between 1-4.")
             return;
         }
+
+        if (user.password !== user.confirmPassword) {
+            setMessage("Passwords do not match!");
+        }
+
         console.log("Sending Data:", {
             name: fullName,
                 email: user.email,
                 major: user.major,
-                year: user.year
+                year: user.year,
+                password: user.password
         });
 
         try {
@@ -40,9 +48,10 @@ function AddUser() {
                 name: fullName,
                 email: user.email,
                 major: user.major,
-                year: user.year
+                year: user.year,
+                password: user.password
             });
-            setUser({ firstName:'', lastName:'', email:'', major:'', year:''});
+            setUser({ firstName:'', lastName:'', email:'', major:'', year:'', password: "", confirmPassword: "",});
             setMessage("Successfully added user")
         } catch (error) {
             setMessage('Error adding user.');
@@ -52,7 +61,7 @@ function AddUser() {
     };
 
     const handleClear = () => {
-        setUser({ firstName: '', lastName: '', email: '', major: '', year: ''});
+        setUser({ firstName: '', lastName: '', email: '', major: '', year: '', password: '', confirmPassword: ''});
         setMessage('');
     }
 
@@ -79,6 +88,14 @@ function AddUser() {
                 <div className="mb-3">
                     <label className="form-label">Year: </label>
                     <input type="text" className="form-control" name="year" value={user.year} onChange={handleChange} required></input>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Password: </label>
+                    <input type="password" className="form-control" name="password" value={user.password} onChange={handleChange} required></input>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Confirm Password: </label>
+                    <input type="password" className="form-control" name="confirmPassword" value={user.confirmPassword} onChange={handleChange} required></input>
                 </div>
                 <button type="submit" className="btn btn-success">Add User</button>
                 <button type="button" className="btn btn-secondary ms-2" onClick={handleClear}>Clear</button>
