@@ -131,6 +131,11 @@ function SearchJobs() {
           />
         </div>
       )}
+      {jobs.msg === "No match found" && (
+        <p>No jobs found.</p>
+      )}
+
+      {jobs.length > 0 && (
 
       <table className='table mt-3'>
         <thead>
@@ -157,13 +162,14 @@ function SearchJobs() {
                   className='btn btn-success btn-sm'
                   onClick={() => saveJob(job.jobid)}
                 >
+                Save
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
+    )}
     </div>
   );
 }
