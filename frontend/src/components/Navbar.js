@@ -82,6 +82,7 @@ function Navbar() {
           <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search Jobs link */}
           <li><Link to="/reviews"><MdOutlineReviews /> Reviews</Link></li> {/* Reviews link */}
           <li><Link to="/scheduleinterview"><FaHandshake /> Book Interview</Link></li> {/* Book Interview link */}
+          <li><Link to="/appliedjobs"><FaHandshake /> Applied</Link></li> {/* Applied Jobs link */}
         </ul>
       )}
     </nav>

@@ -9,6 +9,7 @@ import ReviewCompany from "./pages/reviews";
 import ScheduleInterview from "./pages/scheduleinterview";
 import Login from "./pages/login"
 import Savedjobs from "./pages/saved_jobs";
+import Appliedjobs from "./pages/appliedjobs";
 
 import "./App.css"; // Importing styles
 
@@ -27,6 +28,7 @@ function App() {
             <Route path="/scheduleinterview" element={<ScheduleInterview />} /> {/* Check Interview Booking */}
             <Route path="/login" element={<Login/>} />
             <Route path="/savedjobs" element={<Savedjobs/>} />
+            <Route path="/appliedjobs" element={<Appliedjobs/>} />
           </Routes>
         </main>
 
