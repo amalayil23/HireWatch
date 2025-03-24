@@ -1,32 +1,17 @@
-import React, { useState, useEffect, useRef } from "react"; // Import React and hooks
+import React, { useState, useEffect, useRef, useContext } from "react"; // Import React, hooks, and context
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import { FaBars, FaSearch, FaHome, FaUserPlus, FaHandshake } from "react-icons/fa"; // Import icons
 import { MdOutlineReviews, MdOutlineSavedSearch } from "react-icons/md";
-
+import { UserContext } from "../pages/usercontext"; // Import UserContext
 import "./Navbar.css"; // Import styles
 
 function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false); // State to manage dropdown open/close
-  const [username, setUsername] = useState(""); // State to store the user's name
   const [showSignOut, setShowSignOut] = useState(false); // State to manage sign out visibility
-  const navigate = useNavigate(); // For navigation
   const dropdownRef = useRef(null); // Ref for the dropdown menu
+  const navigate = useNavigate(); // For navigation
 
-  // Fetch the user's name from localStorage on component mount
-  useEffect(() => {
-    const name = localStorage.getItem("name");
-    if (name) {
-      setUsername(name);
-    }
-  }, []);
-
-  // Handle sign out
-  const handleSignOut = () => {
-    localStorage.removeItem("token"); // Remove the token
-    localStorage.removeItem("name"); // Remove the user's name
-    setDropdownOpen(false); // Close the dropdown menu
-    navigate("/login"); // Redirect to the login page
-  };
+  const { user, logout } = useContext(UserContext); // Access user and logout from UserContext
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -41,6 +26,13 @@ function Navbar() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  // Handle sign out
+  const handleSignOut = () => {
+    logout(); // Call the logout function from UserContext
+    setDropdownOpen(false); // Close the dropdown menu
+    navigate("/login"); // Redirect to the login page
+  };
 
   return (
     <nav className="navbar"> {/* Navbar container */}
@@ -61,10 +53,10 @@ function Navbar() {
 
       {dropdownOpen && ( // Conditional rendering of dropdown menu
         <ul className="dropdown-menu" ref={dropdownRef}> {/* Dropdown menu */}
-          {username && ( // Conditional rendering for user info and sign out
+          {user.name && ( // Conditional rendering for user info and sign out
             <>
               <li className="dropdown-user-info" onClick={() => setShowSignOut(!showSignOut)}>
-                Welcome, {username}
+                Welcome, {user.name}
               </li> {/* User info */}
               {showSignOut && (
                 <li>

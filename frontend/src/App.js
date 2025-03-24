@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"; // Import React
 import axios from "axios"; // Import Axios
+import { UserProvider } from "./pages/usercontext.js"; // Import UserProvider
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom"; // Import Router
 import Navbar from "./components/Navbar"; // Import the Navbar
 import Home from "./pages/Home"; // Home Page
@@ -15,6 +16,7 @@ import "./App.css"; // Importing styles
 
 function App() {
   return (
+    <UserProvider> {/* Wrap the app with UserProvider */}
     <Router> {/* Wrap the application in a Router */}
       <div className="container"> {/* Main container */}
         <Navbar /> {/* Navbar */}
@@ -37,6 +39,7 @@ function App() {
         </footer>
       </div>
     </Router>
+    </UserProvider>
   );
 }
 

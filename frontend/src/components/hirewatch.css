@@ -1,0 +1,139 @@
+/* Navbar styles */
+
+
+/* Logo styles */
+.logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.logo-img {
+  height: 40px;
+  margin-right: 10px;
+}
+
+.logo-text {
+  color: #ECF0F1; /* Light Gray */
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* Navbar links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  text-decoration: none;
+  color: #ECF0F1; /* Light Gray */
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: #E74C3C; /* Vibrant Red */
+  color: #ECF0F1; /* Light Gray */
+}
+
+/* Menu icon styles for mobile */
+.menu-icon {
+  display: none;
+  background: none;
+  border: none;
+  color: #ECF0F1; /* Light Gray */
+  font-size: 1.8rem;
+  cursor: pointer;
+  transition: transform 0.2s ease-in-out;
+}
+
+.menu-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Dropdown menu styles */
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background: #ECF0F1; /* Light Gray */
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2); /* Modern shadow */
+  z-index: 1000;
+  display: none; /* Hidden by default */
+}
+
+.dropdown-menu.active {
+  display: block; /* Show dropdown when active */
+}
+
+/* Dropdown links */
+.dropdown-menu li {
+  list-style: none;
+  margin: 10px 0;
+}
+
+.dropdown-menu a {
+  text-decoration: none;
+  color: #2C3E50; /* Dark Blue-Gray */
+  font-size: 1rem;
+  font-weight: 500;
+  display: block;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+  background-color: #E74C3C; /* Vibrant Red */
+  color: #ECF0F1; /* Light Gray */
+}
+
+/* Sign-out button */
+.dropdown-signout-button {
+  width: 100%;
+  background-color: #E74C3C; /* Vibrant Red */
+  color: #ECF0F1; /* Light Gray */
+  border: none;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-signout-button:hover {
+  background-color: #C0392B; /* Darker Red */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide links on mobile */
+    flex-direction: column;
+    gap: 10px;
+    background-color: #2C3E50; /* Dark Blue-Gray */
+    position: absolute;
+    top: 60px;
+    right: 0;
+    width: 100%;
+    padding: 15px 0;
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-links.active {
+    display: flex; /* Show links when active */
+  }
+
+  .menu-icon {
+    display: block; /* Show menu icon on mobile */
+  }
+}

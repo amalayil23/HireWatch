@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
-
+import { UserContext } from "./usercontext"; // Import UserContext
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -9,34 +9,29 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useContext(UserContext); // Use login from UserContext
 
-  // Get the original page's path from the state
   const from = location.state?.from || "/";
 
   const handleLogin = async (e) => {
-    e.preventDefault(); // Prevent the form from refreshing the page
-
-    console.log("Sending login request to:", "https://hirewatch.pythonanywhere.com/login");
-    console.log("Request payload:", { username, password });
+    e.preventDefault();
 
     try {
       const response = await axios.post("https://hirewatch.pythonanywhere.com/login", {
-        username: username,
-        password: password,
+        username,
+        password,
       });
 
       if (response.status === 200) {
         const { access_token, name } = response.data;
 
-        // Store token securely (e.g., localStorage or sessionStorage)
-        localStorage.setItem("token", access_token);
-        localStorage.setItem("name", name);
+        // Use the login function to update the global state
+        login(name, access_token);
 
-        // Update the message with a success message
+        // Redirect to the original page
         navigate(from);
       }
     } catch (error) {
-      console.error("Error details:", error); // Log the error object for debugging
       if (error.response && error.response.status === 403) {
         setMessage("Invalid username or password.");
       } else {
@@ -60,7 +55,6 @@ const Login = () => {
             style={styles.input}
           />
         </div>
-
         <div style={styles.inputGroup}>
           <label htmlFor="password">Password</label>
           <input
@@ -72,18 +66,15 @@ const Login = () => {
             style={styles.input}
           />
         </div>
-
         <button type="submit" style={styles.button}>
           Login
         </button>
       </form>
-
       {message && <p>{message}</p>}
     </div>
   );
 };
 
-// Simple CSS styling for the form
 const styles = {
   container: {
     width: "300px",
