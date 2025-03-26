@@ -11,6 +11,7 @@ import ScheduleInterview from "./pages/scheduleinterview";
 import Login from "./pages/login"
 import Savedjobs from "./pages/saved_jobs";
 import Appliedjobs from "./pages/appliedjobs";
+import BookedInterview from "./pages/bookedinterviews.js";
 
 import "./App.css"; // Importing styles
 
@@ -28,6 +29,7 @@ function App() {
             <Route path="/searchjobs" element={<SearchJobs />} /> {/* Search Jobs Page */}
             <Route path="/reviews" element={<ReviewCompany />} /> {/* Check Company Reviews */}
             <Route path="/scheduleinterview" element={<ScheduleInterview />} /> {/* Check Interview Booking */}
+            <Route path="/bookedinterviews" element={<BookedInterview />} /> {/* Check Booked Interview */}
             <Route path="/login" element={<Login/>} />
             <Route path="/savedjobs" element={<Savedjobs/>} />
             <Route path="/appliedjobs" element={<Appliedjobs/>} />
