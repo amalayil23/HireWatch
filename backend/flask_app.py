@@ -6,6 +6,7 @@ import pymysql
 import credentials
 from flask_cors import CORS
 import hashlib as h
+from datetime import timedelta
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -144,34 +145,46 @@ class Database:
 
 #ADD-INTERVIEWS#########################################################################################################################
 
-    def scheduleInterview(self, firstName, lastName, jobTitle, intDate, intTime, intLocation):
+    def scheduleInterview(self, userid, appid, intDate, intTime, intLocation):
+        if not userid:
+            return 400
+
+        if not all([userid, appid, intDate, intTime, intLocation]):
+            return 400
+
         try:
-            fullName = f"{firstName} {lastName}".strip()
-            self.cur.execute("SELECT userid FROM Users WHERE name = %s", (fullName,))
-            user = self.cur.fetchone()
-            if not user:
-                return {"error": "User not found."}
-            userid = user["userid"]
-
-            self.cur.execute("SELECT jobid FROM Jobs WHERE title = %s", (jobTitle,))
-            job = self.cur.fetchone()
-            if not job:
-                return {"error": "Job not found."}
-            jobid = job["jobid"]
-
-            self.cur.execute("SELECT appid FROM Applications WHERE userid = %s AND jobid = %s LIMIT 1", (userid, jobid))
-            app = self.cur.fetchone()
-            appid = app["appid"] if app else None
-
-            sqlQuery = "INSERT INTO Interviews (userid, appid, intDate, intTime, intLocation) VALUES (%s, %s, %s, %s, %s)"
-            self.cur.execute(sqlQuery, (userid, userid, jobid, intDate, intTime, intLocation))
+            sqlInsert = "INSERT INTO Interviews ( userid, appid, intDate, intTime, intLocation) VALUES (%s, %s, %s, %s, %s)"
+            self.cur.execute(sqlInsert, (userid, appid,intDate, intTime, intLocation))
             self.con.commit()
-            return {"message": "Interview scheduled successfully!"}
-        except pymysql.MYSQLError as err:
-            print(f"Database error: {err}")
-            return {"error": f"Database error {err}"}
+            return {"message": "Interview scheduled successfully!"}, 201
+
+        except (pymysql.MySQLError, Exception) as err:
+            self.con.rollback()
+            return {"error": f"Database error {err}"}, 500
         finally:
             self.con.close()
+
+#VIEW-INTERVIEWS#########################################################################################################################
+
+    def getBookedInterviews(self, userid):
+        if not userid:
+            return 400
+        else:
+            try:
+                sqlQuery = """
+                SELECT *
+                FROM Interviews i
+                WHERE i.userid = %s
+                ORDER BY i.intDate, i.intTime
+                """
+                params = [userid]
+                self.cur.execute(sqlQuery, params)
+                result = self.cur.fetchall()
+                return result
+            except Exception as err:
+                return 500
+            finally:
+                self.con.close()
 
 #SAVED-JOBS####################################################################################################################
 
@@ -196,7 +209,64 @@ class Database:
             finally:
                 self.con.close()
 
+#APPLIED-JOBS####################################################################################################################
+    def appliedJobs(self,userid):
+        if not userid:
+            return 400
+        else:
+            try:
+                sqlQuery = """
+                            select ap.appid, j.title, j.jobType,c.companyName, c.companyLocation, ap.dateApplied, ap.status
+                            FROM Applications ap
+                            NATURAL JOIN Jobs j
+                            NATURAL JOIN Companies c
+                            WHERE ap.userid = %s """
 
+                params = [userid]
+                self.cur.execute(sqlQuery, params)
+                result = self.cur.fetchall()
+                return result
+            except Exception as err:
+                return 500
+            finally:
+                self.con.close()
+
+#UPDATE-APPLIED-JOBS####################################################################################################################
+    def update_appliedJobs(self,appid,newstat):
+        if not appid:
+            return 400
+        else:
+            try:
+                sqlQuery = """
+                            UPDATE Applications ap
+                            SET ap.status = %s
+                            WHERE ap.appid = %s """
+
+                params = [newstat,appid]
+                self.cur.execute(sqlQuery, params)
+                self.con.commit()
+                return "Status updated"
+            except Exception as err:
+                return 500
+            finally:
+                self.con.close()
+
+
+#DELETE-INTERVIEWS####################################################################################################################
+    def rem_BookedInterviews(self, int_id):
+        if not int_id:
+            return 400
+        else:
+            try:
+                sqlQuery = """
+                            DELETE FROM Interviews
+                            WHERE interviewid = %s
+                            """
+                self.cur.execute(sqlQuery, int_id)
+                self.con.commit()
+                return "Successfully removed the interview", 201
+            except Exception as e:
+                return 500
 #**************END OF CLASS DEF**************************************************************************************************************************************************
 
 
@@ -256,10 +326,17 @@ def viewJobs():
 
     if not title:
         return jsonify({"error": "title parameter is required"}), 400
+    else:
+        try:
+            db = Database()
+            result = db.searchJob(title, companyName, location)
+        except Exception as e:
+            return jsonify ({"Server Error":str(e)}),500
 
-    db = Database()
-    result = db.searchJob(title, companyName, location)
-    return jsonify(result)
+    if result == () or result == None:
+        return jsonify({"msg": "No match found"})
+    else:
+        return jsonify(result)
 
 #/reviews#############################################################################################################################
 
@@ -281,29 +358,65 @@ def getReviews():
     print("Fetched reviews:", result)
     return jsonify(result), 200
 
-##############################################################################################################################
+#/scheduleinterview#############################################################################################################################
 @app.route('/scheduleinterview', methods=['GET', 'POST'])
+@jwt_required()
 def scheduleInterview():
-    data = request.json
-    print("Received Data:", data)
+    #data = request.json
+    current_user = get_jwt_identity()
+    if not current_user:
+        return jsonify("Missing Authorization")
+    appid =  request.args.get('appid', '')
+    intDate = request.args.get('intDate', '')
+    intTime = request.args.get('intTime', '')
+    intLocation = request.args.get('intLocation', '')
+    #return jsonify([appid,intDate, intTime, intLocation])
+    if not all([appid, intDate, intTime, intLocation]):
+        return jsonify({'error': 'All fields are requried'}), 400
+    else:
+        try:
+            db = Database()
+            result = db.scheduleInterview(current_user, appid, intDate, intTime, intLocation)
+            return jsonify(result,200)
+        except:
+            return jsonify("Server Error",500)
 
-    firstName = data.get('firstName')
-    lastName = data.get('lastName')
-    jobTitle = data.get('jobTitle')
-    intDate = data.get('intDate')
-    intTime = data.get('intTime')
-    intLocation = data.get('intLocation')
 
-    if not firstName or not lastName or not jobTitle or not intDate or not intTime or not intLocation:
-        return jsonify({'error': 'All fields are required.'}), 400
+#/bookedinterviews#############################################################################################################################
+@app.route("/bookedinterviews", methods=['GET', 'POST'])
+@jwt_required()
+def getBookedInterviews():
+    current_user = get_jwt_identity()
 
-    db = Database()
-    result = db.scheduleInterview(firstName, lastName, jobTitle, intDate, intTime, intLocation)
+    if not current_user:
+        return jsonify({"error": "Invalid token or identity"}), 401
 
-    if "error" in result:
-        return jsonify(result), 400
+    try:
+        #return jsonify(current_user)
+        db = Database()
+        result = db.getBookedInterviews(current_user)
+        # result = result[0]
+        # result['intTime'] = str(result['intTime'])
+        # return jsonify(result)
+        interviews = []
+        if result:
+            for item in result:
+                temp = {}
+                temp['intid'] =  item['interviewid']
+                temp['intDate'] =  item['intDate']
+                temp['intTime'] = str(item['intTime'])
+                temp['intLocation'] =  item['intLocation']
+                interviews.append(temp)
 
-    return jsonify(result), 201
+
+            return jsonify(interviews)
+        if not result:
+            return jsonify({"message": "No interviews booked yet"}), 200
+
+
+
+    except Exception as err:
+        return jsonify({"error": str(err)}), 500
 
 #/login#############################################################################################################################
 ##JWT used
@@ -332,7 +445,7 @@ def login():
 
     return jsonify(result)
 
-#/savejos#############################################################################################################################
+#/savejobs#############################################################################################################################
 @app.route("/savejob", methods=["GET", "POST"])
 @jwt_required()
 def save_job():
@@ -375,6 +488,68 @@ def get_savedjobs():
         result = db.savedJobs(current_user)
 
     return jsonify(result), 200
+
+#/appliedjobs#############################################################################################################################
+@app.route("/appliedjobs", methods=["GET", "PUT"])
+@jwt_required()
+def applied_jobs():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    if not current_user:
+        return jsonify({"error": "Invalid token or identity"}), 401
+
+    if request.method == 'GET' and current_user:
+        if isinstance(current_user, int):
+            try:
+                db = Database()
+                result = db.appliedJobs(current_user)
+                if result == () or result == None:
+                    return jsonify("No Jobs Saved"),200
+                else:
+                    return jsonify(result),200
+            except Exception as e:
+                return jsonify("Error try again"), 500
+
+    elif request.method == 'PUT' and current_user:
+        data = request.json
+        if not data:
+            return jsonify("Appid or status missing"),404
+        else:
+            try:
+                appid = data.get('appid')
+                newstat = data.get('newStatus')
+                db = Database()
+                result = db.update_appliedJobs(appid,newstat)
+                return jsonify(result)
+            except:
+                return jsonify("Server Error"),500
+
+#/removeinterview#############################################################################################################################
+@app.route("/removeinterview", methods=["GET","DELETE"])
+@jwt_required()
+def remove_interview():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    int_id =  request.args.get('intid', '')
+    if not current_user:
+        return jsonify({"error": "Invalid token or identity"}), 401
+    elif not int_id:
+        return jsonify({"error": "Interview ID missing or invalid"}), 401
+    else:
+        try:
+            db = Database()
+            result = db.rem_BookedInterviews(int_id)
+            # return ("We are here")
+            if result == 500:
+                return jsonify ("Server Error"),500
+            elif result[0] == "Successfully removed the interview":
+                return jsonify(result)
+        except Exception as e:
+            return jsonify("Server Error",e),500
+
+
+
+##############################################################################################################################
 
 
 if __name__ == '__main__':
