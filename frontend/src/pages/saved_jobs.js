@@ -31,6 +31,26 @@ const Savedjobs = () => {
     }
   }, [navigate]);
 
+  const addToApplied = async (jobid) => {
+    const token = localStorage.getItem("token");
+    console.log("Adding job to applied:", jobid); // Debugging line
+
+    try {
+
+      
+      const response = await axios.post(
+        `https://hirewatch.pythonanywhere.com/addapplied?jobid=${jobid}`, null,
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      alert(response.data.message || "Job added to applied successfully!");
+    } catch (error) {
+      console.error("Error adding job to applied:", error);
+      alert("Failed to add job to applied. Please try again.");
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -50,6 +70,7 @@ const Savedjobs = () => {
               <th>Job Type</th>
               <th>Job URL</th>
               <th>Title</th>
+              <th>Action</th> {/* New column for the "Add to Applied" button */}
             </tr>
           </thead>
           <tbody>
@@ -60,6 +81,14 @@ const Savedjobs = () => {
                 <td>{job.jobType}</td>
                 <td><a href={job.jobUrl} target="_blank" rel="noopener noreferrer">View Job</a></td>
                 <td>{job.title}</td>
+                <td>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => addToApplied(job.jobid)} // Call the function with jobid
+                  >
+                    Add to Applied
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
