@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import axios from "axios";
 import './savedjobs.css';
+import BookedInterview from "./bookedinterviews";
 
 function Appliedjobs() {
   const [jobs, setJobs] = useState([]); // State to store jobs
@@ -39,6 +40,11 @@ function Appliedjobs() {
       ...prevStatuses,
       [appid]: newStatus, // Update the temporary status for the specific job
     }));
+  };
+
+  const scheduleInterview = (appid) => {
+    console.log(appid)
+    navigate(`/scheduleinterview`, { state: { appid } });
   };
 
   // Function to save the updated status to the backend
@@ -105,6 +111,8 @@ function Appliedjobs() {
               <th>Date Applied</th>
               <th>Status</th>
               <th>Action</th>
+              <th>Save</th>
+              <th>Schedule</th>
             </tr>
           </thead>
           <tbody>
@@ -134,6 +142,14 @@ function Appliedjobs() {
                     onClick={() => updateApp(job.appid)}
                   >
                     Save
+                  </button>
+                </td>
+                <td>
+                <button
+                    className="btn btn-primary btn-sm"
+                    onClick={() => scheduleInterview(job.appid)} 
+                  >
+                    Schedule Interview
                   </button>
                 </td>
               </tr>

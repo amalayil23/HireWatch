@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from "react"; // Import React, hooks, and context
 import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
-import { FaBars, FaSearch, FaHome, FaUserPlus, FaHandshake } from "react-icons/fa"; // Import icons
+import { FaBars, FaSearch, FaHome, FaUserPlus, FaHandshake, FaBriefcase } from "react-icons/fa"; // Import icons
 import { MdOutlineReviews, MdOutlineSavedSearch } from "react-icons/md";
 import { UserContext } from "../pages/usercontext"; // Import UserContext
 import "./Navbar.css"; // Import styles
@@ -73,8 +73,8 @@ function Navbar() {
           <li><Link to="/addusers"><FaUserPlus /> Sign Up</Link></li> {/* Sign Up link */}
           <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search Jobs link */}
           <li><Link to="/reviews"><MdOutlineReviews /> Reviews</Link></li> {/* Reviews link */}
-          <li><Link to="/scheduleinterview"><FaHandshake /> Book Interview</Link></li> {/* Book Interview link */}
-          <li><Link to="/appliedjobs"><FaHandshake /> Applied</Link></li> {/* Applied Jobs link */}
+          <li><Link to="/bookedinterviews"><FaHandshake /> View Interviews</Link></li> {/* View Booked Interviews link */}
+          <li><Link to="/appliedjobs"><FaBriefcase /> Applied</Link></li> {/* Applied Jobs link */}
         </ul>
       )}
     </nav>
