@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 //import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 function SearchJobs() {
   const [filters, setFilters] = useState({
@@ -13,6 +14,7 @@ function SearchJobs() {
   const [showFilters, setShowFilters] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState('');
+  const navigate = useNavigate(); // Initialize useNavigate
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -45,6 +47,7 @@ function SearchJobs() {
     console.log(token)
     if (!isLoggedIn) {
       alert('You must be logged in to save jobs');
+      navigate('/login', { state: { from: '/searchjobs' } }); // Redirect to login with state
       return
     }
 
