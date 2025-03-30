@@ -110,6 +110,8 @@ function Appliedjobs() {
               <th>Date Applied</th>
               <th>Status</th>
               <th>Action</th>
+              <th>Save</th>
+              <th>Schedule</th>
             </tr>
           </thead>
           <tbody>
@@ -135,12 +137,14 @@ function Appliedjobs() {
                 </td>
                 <td>
                   <button
-                    className="btn btn-success btn-sm-2"
+                    className="btn btn-success btn-sm"
                     onClick={() => updateApp(job.appid)}
                   >
                     Save
                   </button>
-                  <button
+                </td>
+                <td>
+                <button
                     className="btn btn-primary btn-sm"
                     onClick={() => scheduleInterview(job.appid)} 
                   >
