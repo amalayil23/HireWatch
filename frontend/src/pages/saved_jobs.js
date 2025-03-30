@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import './savedjobs.css'
 
@@ -65,7 +65,7 @@ const Savedjobs = () => {
           </tbody>
         </table>
       )}
-      <p><a href="/searchjobs">Browse more jobs</a></p>
+      <p><li><Link to="/searchjobs"> Browse more jobs Jobs</Link></li></p>
     </div>
   );
 };

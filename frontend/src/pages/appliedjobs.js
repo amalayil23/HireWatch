@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Import Link and useNavigate
 import axios from "axios";
 import './savedjobs.css';
 
@@ -9,6 +9,7 @@ function Appliedjobs() {
   const [selectedStatuses, setSelectedStatuses] = useState({}); // Temporary state for dropdown selections
   const navigate = useNavigate();
   const uname = localStorage.getItem("name");
+  
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -121,7 +122,7 @@ function Appliedjobs() {
                     value={selectedStatuses[job.appid] || job.status} // Show temporary status or fallback to current status
                     onChange={(e) => handleStatusChange(job.appid, e.target.value)}
                   >
-                    <option value="Applied">Pending</option>
+                    <option value="Pending">Pending</option>
                     <option value="Interviewed">Interviewed</option>
                     <option value="Rejected">Rejected</option>
                     <option value="Accepted">Accepted</option>
@@ -140,7 +141,7 @@ function Appliedjobs() {
           </tbody>
         </table>
       )}
-      <p><a href="/searchjobs">Browse more jobs</a></p>
+      <p><li><Link to="/searchjobs"> Search Jobs</Link></li></p>
     </div>
   );
 }
