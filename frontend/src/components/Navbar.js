@@ -69,12 +69,12 @@ function Navbar() {
             </>
           )}
           <li><Link to="/"><FaHome /> Home</Link></li> {/* Home link */}
-          <li><Link to="/savedjobs"><MdOutlineSavedSearch /> Saved Jobs</Link></li> {/* Saved Jobs link */}
-          <li><Link to="/addusers"><FaUserPlus /> Sign Up</Link></li> {/* Sign Up link */}
           <li><Link to="/searchjobs"><FaSearch /> Search Jobs</Link></li> {/* Search Jobs link */}
-          <li><Link to="/reviews"><MdOutlineReviews /> Reviews</Link></li> {/* Reviews link */}
-          <li><Link to="/bookedinterviews"><FaHandshake /> View Interviews</Link></li> {/* View Booked Interviews link */}
+          <li><Link to="/savedjobs"><MdOutlineSavedSearch /> Saved Jobs</Link></li> {/* Saved Jobs link */}
           <li><Link to="/appliedjobs"><FaBriefcase /> Applied</Link></li> {/* Applied Jobs link */}
+          <li><Link to="/bookedinterviews"><FaHandshake /> View Interviews</Link></li> {/* View Booked Interviews link */}   
+          <li><Link to="/reviews"><MdOutlineReviews /> Reviews</Link></li> {/* Reviews link */}         
+          <li><Link to="/addusers"><FaUserPlus /> Sign Up</Link></li> {/* Sign Up link */}
         </ul>
       )}
     </nav>

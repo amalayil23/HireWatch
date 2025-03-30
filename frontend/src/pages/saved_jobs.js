@@ -46,11 +46,15 @@ const Savedjobs = () => {
       );
       alert(response.data.message || "Job added to applied successfully!");
     } catch (error) {
+      // Check if the error response contains a message
+      if (error.response && error.response.data) {
+        alert(error.response.data); // Display the backend message as an alert
+      } else {
+        alert("Failed to add job to applied. Please try again.");
+      }
       console.error("Error adding job to applied:", error);
-      alert("Failed to add job to applied. Please try again.");
     }
   };
-
   if (loading) {
     return <div>Loading...</div>;
   }
