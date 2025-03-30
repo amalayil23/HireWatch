@@ -6,7 +6,7 @@ import pymysql
 import credentials
 from flask_cors import CORS
 import hashlib as h
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -193,7 +193,7 @@ class Database:
             return 400
         else:
             try:
-                sqlQuery = """select j.title,j.jobUrl,j.jobType,c.companyName,sj.dateSaved
+                sqlQuery = """select j.jobid, j.title,j.jobUrl,j.jobType,c.companyName,sj.dateSaved
                             from Users u
                             natural join Saved_Jobs sj
                             natural join Jobs j
@@ -267,8 +267,43 @@ class Database:
                 return "Successfully removed the interview", 201
             except Exception as e:
                 return 500
+
+
+#ADD-APPLIED####################################################################################################################
+
+    def add_Applications(self, userid, jobid):
+        if not userid or not jobid:
+            return 400
+        else:
+            try:
+                sqlQuery  = "SELECT userid,jobid FROM Applications where userid =%s and jobid=%s"
+                params = [userid, jobid]
+                self.cur.execute(sqlQuery, params)
+                result = self.cur.fetchall()
+                if len(result) > 0:
+                    return "Job already in Applied"
+                else:
+                    sqlInsert = """
+                                INSERT INTO Applications (userid, jobid, status, dateApplied)
+                                VALUES (%s, %s, %s, %s)
+                               """
+                    cur_date = datetime.now()
+                    formatted_date = cur_date.strftime("%Y-%m-%d")
+                    status = "Pending"
+                    self.cur.execute(sqlInsert, (userid, jobid, status, formatted_date))
+                    self.con.commit()
+                    return "Success"
+            except Exception as e:
+                return [str(e),500]
+
+            # sqlInsert = "INSERT INTO Interviews ( userid, appid, intDate, intTime, intLocation) VALUES (%s, %s, %s, %s, %s)"
+            # self.cur.execute(sqlInsert, (userid, appid,intDate, intTime, intLocation))
+            # self.con.commit()
+
 #**************END OF CLASS DEF**************************************************************************************************************************************************
 
+# db = Database()
+# db.add_Applications(101,31)
 
 #***********************APPS*****************************************************************************************************************************************************
 
@@ -523,6 +558,32 @@ def applied_jobs():
                 return jsonify(result)
             except:
                 return jsonify("Server Error"),500
+
+
+#/addapplied#############################################################################################################################
+@app.route("/addapplied", methods=["GET","POST"])
+@jwt_required()
+def add_applied():
+    # Access the identity of the current user with get_jwt_identity
+    current_user = get_jwt_identity()
+    jobid =  request.args.get('jobid', '')
+    if not current_user:
+        return jsonify({"error": "Invalid token or identity"}), 401
+    elif not jobid:
+        return jsonify({"error": "Job ID missing or invalid"}), 401
+    else:
+        try:
+            db = Database()
+            #return("We are here")
+            result = db.add_Applications(current_user, jobid)
+            if result == 500:
+                return jsonify ("Server Error"),500
+            elif result == "Success":
+                return jsonify(result),201
+            elif result == "Job already in Applied":
+                return jsonify("Job already in Applied", 404)
+        except Exception as e:
+            return jsonify("Server Error",e),500
 
 #/removeinterview#############################################################################################################################
 @app.route("/removeinterview", methods=["GET","DELETE"])
