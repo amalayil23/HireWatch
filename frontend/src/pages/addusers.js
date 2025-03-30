@@ -67,7 +67,7 @@ function AddUser() {
 
     return (
         <div className="container">
-            <h2>Add a New User</h2>
+            <h2>Sign Up!</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label">First Name: </label>

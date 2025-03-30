@@ -65,7 +65,8 @@ const Savedjobs = () => {
           </tbody>
         </table>
       )}
-      <p><li><Link to="/searchjobs"> Browse more jobs Jobs</Link></li></p>
+      <br></br>
+      <Link to="/searchjobs"> Browse Jobs</Link>
     </div>
   );
 };

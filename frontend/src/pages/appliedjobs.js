@@ -157,7 +157,8 @@ function Appliedjobs() {
           </tbody>
         </table>
       )}
-      <p><li><Link to="/searchjobs"> Search Jobs</Link></li></p>
+      <br></br>
+      <Link to="/searchjobs"> Browse Jobs</Link>
     </div>
   );
 }
