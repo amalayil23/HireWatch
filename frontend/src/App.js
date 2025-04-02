@@ -37,7 +37,7 @@ function App() {
         </main>
 
         <footer className="footer"> {/* Footer */}
-          <p>© {new Date().getFullYear()} HireWatch | your job search companion</p> {/* Footer text */}
+          <p>© {new Date().getFullYear()} HireWatch | Your Job Search Companion</p> {/* Footer text */}
         </footer>
       </div>
     </Router>
